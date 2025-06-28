@@ -9,6 +9,8 @@ jobs:
   run:
     runs-on: ubuntu-latest
     timeout-minutes: 360  # Max runtime: 6 hours
+    permissions:
+      contents: write  # Critical for push access
 
     steps:
     - name: Checkout Repo
