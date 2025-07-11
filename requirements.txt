@@ -3,3 +3,5 @@ pandas
 pyarrow
 yfinance
 tqdm
+duckdb
+huggingface_hub

@@ -1,4 +1,4 @@
-name: Daily YFinance Downloader
+name: Daily Pipeline
 
 on:
   schedule:
@@ -14,10 +14,10 @@ jobs:
 
     steps:
     - name: Checkout Repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4.2.2
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5.6.0
       with:
         python-version: 3.11
 
@@ -25,9 +25,9 @@ jobs:
       run: |
         pip install -r requirements.txt
 
-    - name: Run Script
+    - name: Downloads data from yfinance
       run: |
-        python main.py
+        python download.py
 
     - name: Commit & Push Updated Parquet
       run: |
@@ -36,5 +36,17 @@ jobs:
         git add parquet_data/
         git commit -m "Daily update"
         git push
-      continue-on-error: true  # Avoid failure if nothing changed
 
+    - name: Consolidates the downloaded data
+      run: |
+        python consolidate.py
+
+    - name: Generates metadata for the dataset
+      run: |
+        python metadata.py
+
+    - name: Uploads the dataset to Hugging Face
+      env:
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      run: |
+        python upload.py
