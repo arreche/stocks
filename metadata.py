@@ -24,4 +24,4 @@ df['run_pct'] = ((df['high'] - df['open']) / df['open'] * 100).round(2)
 df['avg_volume_20d'] = df.groupby('symbol')['volume'].transform(lambda x: x.rolling(window=20, min_periods=1).mean())
 df['relative_volume'] = (df['volume'] / df['avg_volume_20d']).round(2)
 
-df.to_parquet('stocks.parquet', compression='snappy')
+df.to_parquet('stocks.parquet', compression='snappy', row_group_size=100_000)
