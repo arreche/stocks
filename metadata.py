@@ -20,7 +20,7 @@ df = df.sort_values(['symbol', 'date'])
 df['prev_close'] = df.groupby('symbol')['close'].shift(1)
 df['change_pct'] = ((df['close'] - df['prev_close']) / df['prev_close'] * 100).round(2)
 df['gap_pct'] = ((df['open'] - df['prev_close']) / df['prev_close'] * 100).round(2)
-df['run_pct'] = ((df['close'] - df['open']) / df['open'] * 100).round(2)
+df['run_pct'] = ((df['high'] - df['open']) / df['open'] * 100).round(2)
 df['avg_volume_20d'] = df.groupby('symbol')['volume'].transform(lambda x: x.rolling(window=20, min_periods=1).mean())
 df['relative_volume'] = (df['volume'] / df['avg_volume_20d']).round(2)
 
