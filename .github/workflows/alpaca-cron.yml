@@ -1,0 +1,47 @@
+name: Daily Pipeline Alpaca
+
+on:
+  schedule:
+    - cron: "0 2 * * *"  # Run every day at 2:00 UTC
+  workflow_dispatch:     # Allow manual trigger
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360  # Max runtime: 6 hours
+    permissions:
+      contents: write  # Critical for push access
+
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v4.2.2
+
+    - name: Set up Python
+      uses: actions/setup-python@v5.6.0
+      with:
+        python-version: 3.11
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Downloads data from alpaca
+      env:
+        ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+        ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+      run: |
+        python download_alpaca.py
+
+    - name: Consolidates the downloaded data
+      run: |
+        python consolidate_alpaca.py
+
+    - name: Generates metadata for the dataset
+      run: |
+        python metadata_alpaca.py
+
+    - name: Uploads the dataset to Hugging Face
+      env:
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      run: |
+        python upload_alpaca.py

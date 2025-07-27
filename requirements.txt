@@ -5,3 +5,5 @@ yfinance
 tqdm
 duckdb
 huggingface_hub
+alpaca-py
+python-dotenv
