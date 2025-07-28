@@ -1,3 +1,4 @@
-stock_prices.parquet
-stocks.parquet
 .env
+*_data
+*.parquet
+__pycache__

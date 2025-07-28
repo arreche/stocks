@@ -3,5 +3,8 @@ pandas
 pyarrow
 yfinance
 tqdm
+click
 duckdb
 huggingface_hub
+alpaca-py
+python-dotenv
