@@ -2,7 +2,7 @@ import click
 from dotenv import load_dotenv
 
 from data_sources import alpaca, yahoo
-from lib import add_metadata, get_symbols
+from lib import add_metadata, get_symbols, upload_hf
 
 load_dotenv()
 
@@ -30,6 +30,8 @@ def main(source, skip_download):
     print(df.head())
 
     df.to_parquet(f"{source}.parquet", compression="snappy", row_group_size=100_000)
+
+    upload_hf()
 
 
 if __name__ == "__main__":

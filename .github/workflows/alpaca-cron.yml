@@ -23,7 +23,7 @@ jobs:
       run: |
         pip install -r requirements.txt
 
-    - name: Downloads data from alpaca
+    - name: Sync data from alpaca
       env:
         HF_TOKEN: ${{ secrets.HF_TOKEN }}
         ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
