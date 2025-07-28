@@ -8,6 +8,7 @@ from alpaca.data.enums import Adjustment
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import StockBarsRequest
 from alpaca.data.timeframe import TimeFrame
+from tqdm import tqdm
 
 from lib import chunk_list
 
@@ -23,7 +24,9 @@ def download(tickers, start_date=datetime(2025, 1, 1), data_dir=DATA_DIR_ALPACA)
 
     client = StockHistoricalDataClient(alpaca_api_key, alpaca_secret_key)
 
-    for batch in chunk_list(tickers, 200):  # Alpaca limit is 200 per request
+    for batch in tqdm(
+        list(chunk_list(tickers, 200)), desc="Downloading batches"
+    ):  # Alpaca limit is 200 per request
         try:
             request = StockBarsRequest(
                 symbol_or_symbols=batch,
